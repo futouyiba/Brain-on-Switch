@@ -1,5 +1,5 @@
 '''
-Handle the raw dataset: raw_pcap -> pcap
+Handle the raw dataset: source -> pcap
 * only tcp packets
 * split flow by session & interval time
 '''
@@ -22,7 +22,8 @@ interval_seconds = {
     'ISCXVPN2016': 0.256,
     "BOTIOT": 0.256,
     'CICIOT2022': 0.256,
-    'PeerRush': 0.256
+    'PeerRush': 0.256,
+    'unswnb15': 3600,
 }
 
 PeerRush_IP_filter = {
@@ -69,12 +70,12 @@ def main():
 
     # Dataset
     parser.add_argument("--dataset", default="ISCXVPN2016",
-                        choices=["ISCXVPN2016", "BOTIOT", "CICIOT2022", "PeerRush"])
+                        choices=["ISCXVPN2016", "BOTIOT", "CICIOT2022", "PeerRush","unswnb15"])
     args = parser.parse_args()
 
-    for p, dirs_label, _ in os.walk('./{}/raw_pcap'.format(args.dataset)):
+    for p, dirs_label, _ in os.walk('./{}/source'.format(args.dataset)):
         for dir_label in dirs_label:
-            tgt_dir = os.path.join(p.replace('raw_pcap', 'pcap'), dir_label)
+            tgt_dir = os.path.join(p.replace('source', 'pcap'), dir_label)
             if os.path.exists(tgt_dir):
                 shutil.rmtree(tgt_dir)
             os.mkdir(tgt_dir)
@@ -119,10 +120,14 @@ def main():
                     os.remove(clean_file)
                     for _, _, session_pcap_files in os.walk(session_dir):
                         for session_pcap_file in session_pcap_files:
+                            filename = session_pcap_file
                             session_pcap_file = os.path.join(session_dir, session_pcap_file)
                             segment_dir = session_pcap_file.replace(file + '.', '').replace('.pcap', '')
-                            split_pcap_by_time(session_pcap_file, segment_dir, interval_seconds[args.dataset], args, dir_label)
-                            os.remove(session_pcap_file)
+                            newFileName = os.path.join(segment_dir, filename)
+                            os.mkdir(segment_dir)
+                            os.rename(session_pcap_file, newFileName)
+                            # split_pcap_by_time(session_pcap_file, segment_dir, interval_seconds[args.dataset], args, dir_label)
+                            # os.remove(session_pcap_file)
                         break
         break
 

@@ -80,7 +80,7 @@ def preprocess_flow(flow_file, label, args):
 def main():
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("--dataset", type=str, default="ISCXVPN2016",
-                        choices=['CICIOT2022', 'ISCXVPN2016', 'PeerRush', 'BOTIOT'])
+                        choices=['CICIOT2022', 'ISCXVPN2016', 'PeerRush', 'BOTIOT', 'unswnb15'])
     parser.add_argument("--window_size", type=int, default=8)
     args = parser.parse_args()
     

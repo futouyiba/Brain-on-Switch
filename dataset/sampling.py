@@ -11,7 +11,7 @@ window_size = 8
 def main():
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("--dataset", type=str, default="ISCXVPN2016",
-                        choices=['CICIOT2022', 'PeerRush', 'ISCXVPN2016', 'BOTIOT'])
+                        choices=['CICIOT2022', 'PeerRush', 'ISCXVPN2016', 'BOTIOT', 'unswnb15'])
     parser.add_argument("--train_ratio", type=float, default=0.8)
     args = parser.parse_args()
 
